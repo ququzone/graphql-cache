@@ -2,20 +2,25 @@ const http = require('http');
 const crypto = require('crypto');
 const connect = require('connect');
 const httpProxy = require('http-proxy');
+const redis = require('redis');
+require('dotenv').config();
+
+const redisClient = redis.createClient({
+  url: process.env.REDIS_URL,
+});
 
 var app = connect();
-
-const cache = {};
 
 var bodyParser = require('body-parser');
 app.use(bodyParser.json({extended: true}));
 
-app.use((req, res, next) => {
+app.use(async (req, res, next) => {
   if (req.method === 'POST') {
     const hash = crypto.createHash('sha256').update(JSON.stringify(req.body)).digest('hex');
     req.hash = hash;
-    if (cache.hasOwnProperty(hash)) {
-      return res.end(cache[hash]);
+    const data = await redisClient.get(process.env.CACHE_PREFIX + hash);
+    if (data) {
+      return res.end(data);
     }
   }
   next();
@@ -26,7 +31,7 @@ app.use((req, res, next) => {
 });
 
 var proxy = httpProxy.createProxyServer({
-  target: 'http://35.226.135.52:8000'
+  target: process.env.TARGET
 });
 proxy.on('proxyReq', (proxyReq, req, res) => {
   if (!req.body || !Object.keys(req.body).length) {
@@ -46,18 +51,22 @@ proxy.on('proxyReq', (proxyReq, req, res) => {
     writeBody(querystring.stringify(req.body));
   }
 });
-proxy.on('proxyRes', function (proxyRes, req, res) {
+proxy.on('proxyRes', async (proxyRes, req, res) => {
   if (req.hash) {
     let body = [];
-    proxyRes.on('data', function (chunk) {
+    proxyRes.on('data', (chunk) => {
       body.push(chunk);
     });
-    proxyRes.on('end', function () {
+    proxyRes.on('end', async () => {
       body = Buffer.concat(body).toString();
-      cache[req.hash] = body;
+      await redisClient.set(process.env.CACHE_PREFIX + req.hash, body, {
+        EX: process.env.CACHE_TTL,
+      });
     });
   }
 });
 
-console.log("listening on port 3000");
-http.createServer(app).listen(3000);
+http.createServer(app).listen(3000, async () => {
+  await redisClient.connect();
+  console.log("listening on port 3000");
+});
