@@ -1,5 +1,5 @@
 {
-  "name": "mimo-subgraph-cache",
+  "name": "graphql-cache",
   "version": "1.0.0",
   "license": "MIT",
   "devDependencies": {},
