@@ -20,15 +20,17 @@ app.use(async (req, res, next) => {
     req.hash = hash;
     const data = await redisClient.get(process.env.CACHE_PREFIX + hash);
     if (data) {
+      res.setHeader('Access-Control-Allow-Origin', ['*']);
+      res.setHeader('Access-Control-Allow-Methods', 'GET,PUT,POST,DELETE');
+      res.setHeader('Access-Control-Allow-Headers', 'Content-Type');
       return res.end(data);
     }
+  } else if (req.method === 'OPTIONS') {
+    res.setHeader('Access-Control-Allow-Origin', ['*']);
+    res.setHeader('Access-Control-Allow-Methods', 'GET,PUT,POST,DELETE');
+    res.setHeader('Access-Control-Allow-Headers', 'Content-Type');
+    return res.end();
   }
-  // if (req.method === 'OPTIONS') {
-  //   res.setHeader('Access-Control-Allow-Origin', ['*']);
-  //   res.setHeader('Access-Control-Allow-Methods', 'GET,PUT,POST,DELETE');
-  //   res.setHeader('Access-Control-Allow-Headers', 'Content-Type');
-  //   return res.end();
-  // }
   next();
 });
 
