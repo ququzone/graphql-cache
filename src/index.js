@@ -9,9 +9,9 @@ const redisClient = redis.createClient({
   url: process.env.REDIS_URL,
 });
 
-var app = connect();
+const app = connect();
 
-var bodyParser = require('body-parser');
+const bodyParser = require('body-parser');
 app.use(bodyParser.json({extended: true}));
 
 app.use(async (req, res, next) => {
@@ -30,7 +30,7 @@ app.use((req, res, next) => {
   proxy.web(req, res);
 });
 
-var proxy = httpProxy.createProxyServer({
+const proxy = httpProxy.createProxyServer({
   target: process.env.TARGET
 });
 proxy.on('proxyReq', (proxyReq, req, res) => {
