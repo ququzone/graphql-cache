@@ -66,7 +66,7 @@ proxy.on('proxyRes', async (proxyRes, req, res) => {
   }
 });
 
-http.createServer(app).listen(3000, async () => {
+http.createServer(app).listen(process.env.PORT, async () => {
   await redisClient.connect();
-  console.log("listening on port 3000");
+  console.log(`listening on port ${process.env.PORT}`);
 });
