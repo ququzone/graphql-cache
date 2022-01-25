@@ -67,8 +67,12 @@ proxy.on('proxyRes', async (proxyRes, req, res) => {
     });
     proxyRes.on('end', async () => {
       body = Buffer.concat(body).toString();
+      let ttl = process.env.CACHE_TTL;
+      if (req.url === '/subgraphs/name/common/blocks') {
+        ttl = process.env.CACHE_BLOCKS_TTL;
+      }
       await redisClient.set(process.env.CACHE_PREFIX + req.hash, body, {
-        EX: process.env.CACHE_TTL,
+        EX: ttl,
       });
     });
   }
