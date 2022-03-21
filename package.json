@@ -2,6 +2,9 @@
   "name": "graphql-cache",
   "version": "1.0.0",
   "license": "MIT",
+  "scripts": {
+    "start": "node src/index.js"
+  },
   "devDependencies": {},
   "dependencies": {
     "body-parser": "^1.19.1",
