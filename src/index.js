@@ -23,6 +23,7 @@ app.use(async (req, res, next) => {
       res.setHeader('Access-Control-Allow-Origin', ['*']);
       res.setHeader('Access-Control-Allow-Methods', 'GET,PUT,POST,DELETE');
       res.setHeader('Access-Control-Allow-Headers', 'Content-Type');
+      res.setHeader('Cache-Control', `s-maxage=${process.env.CACHE_MAXAGE}, stale-while-revalidate`);
       return res.end(data);
     }
   } else if (req.method === 'OPTIONS') {
@@ -67,8 +68,12 @@ proxy.on('proxyRes', async (proxyRes, req, res) => {
     });
     proxyRes.on('end', async () => {
       body = Buffer.concat(body).toString();
+      let ttl = process.env.CACHE_TTL;
+      if (req.url === '/subgraphs/name/common/blocks') {
+        ttl = process.env.CACHE_BLOCKS_TTL;
+      }
       await redisClient.set(process.env.CACHE_PREFIX + req.hash, body, {
-        EX: process.env.CACHE_TTL,
+        EX: ttl,
       });
     });
   }
