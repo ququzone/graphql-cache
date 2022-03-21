@@ -23,6 +23,7 @@ app.use(async (req, res, next) => {
       res.setHeader('Access-Control-Allow-Origin', ['*']);
       res.setHeader('Access-Control-Allow-Methods', 'GET,PUT,POST,DELETE');
       res.setHeader('Access-Control-Allow-Headers', 'Content-Type');
+      res.setHeader('Cache-Control', `s-maxage=${process.env.CACHE_MAXAGE}, stale-while-revalidate`);
       return res.end(data);
     }
   } else if (req.method === 'OPTIONS') {
