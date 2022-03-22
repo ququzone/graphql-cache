@@ -12,7 +12,7 @@ const hotCache = cacheManager.caching({
 });
 const coldCache = cacheManager.caching({
   store: "memory",
-  ttl: 300 /*seconds*/,
+  ttl: 600 /*seconds*/,
 });
 
 const redisClient = redis.createClient({
