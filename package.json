@@ -5,11 +5,14 @@
   "scripts": {
     "start": "node src/index.js"
   },
-  "devDependencies": {},
   "dependencies": {
+    "@types/cache-manager": "^3.4.3",
+    "@types/etag": "^1.8.1",
     "body-parser": "^1.19.1",
+    "cache-manager": "^3.6.0",
     "connect": "^3.7.0",
     "dotenv": "^10.0.0",
+    "etag": "^1.8.1",
     "http-proxy": "^1.18.1",
     "redis": "^4.0.1"
   }
