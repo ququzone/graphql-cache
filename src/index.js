@@ -15,9 +15,9 @@ const coldCache = cacheManager.caching({
   ttl: 600 /*seconds*/,
 });
 
-const redisClient = redis.createClient({
-  url: process.env.REDIS_URL,
-});
+// const redisClient = redis.createClient({
+//   url: process.env.REDIS_URL,
+// });
 
 const app = connect();
 
@@ -109,6 +109,6 @@ proxy.on("proxyRes", async (proxyRes, req, res) => {
 });
 
 http.createServer(app).listen(process.env.PORT, async () => {
-  await redisClient.connect();
+//   await redisClient.connect();
   console.log(`listening on port ${process.env.PORT}`);
 });
