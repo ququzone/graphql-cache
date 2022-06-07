@@ -95,7 +95,7 @@ proxy.on("proxyRes", async (proxyRes, req, res) => {
       if (req.url === "/subgraphs/name/common/blocks") {
         ttl = process.env.CACHE_BLOCKS_TTL;
       }
-      console.log("not hit cache", req.body, req.hash);
+      // console.log("not hit cache", req.body, req.hash);
 
       await hotCache.set(process.env.CACHE_PREFIX + req.hash, body, {
         EX: ttl,
