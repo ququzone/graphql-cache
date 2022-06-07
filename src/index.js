@@ -62,6 +62,8 @@ app.use((req, res, next) => {
 
 const proxy = httpProxy.createProxyServer({
   target: process.env.TARGET,
+  secure: false,
+  selfHandleResponse: true,
 });
 proxy.on("proxyReq", (proxyReq, req, res) => {
   if (!req.body || !Object.keys(req.body).length) {
