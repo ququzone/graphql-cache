@@ -107,8 +107,15 @@ proxy.on("proxyRes", async (proxyRes, req, res) => {
     });
   }
 });
+proxy.on("error", function (err, req, res) {
+  res.writeHead(500, {
+    "Content-Type": "text/plain",
+  });
+
+  res.end("Something went wrong. And we are reporting a custom error message.");
+});
 
 http.createServer(app).listen(process.env.PORT, async () => {
-//   await redisClient.connect();
+  //   await redisClient.connect();
   console.log(`listening on port ${process.env.PORT}`);
 });
