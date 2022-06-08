@@ -38,7 +38,7 @@ app.use(async (req, res, next) => {
     ]);
     const data = hotData || coldData;
     if (!hotCache) {
-      next();
+      return next();
     }
     if (data) {
       console.log("hit cache");
