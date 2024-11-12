@@ -5,15 +5,15 @@ const httpProxy = require("http-proxy");
 const redis = require("redis");
 require("dotenv").config();
 const cacheManager = require("cache-manager");
-const {TTL = 6000} = process.env
+const {CACHE_TTL = 6000} = process.env
 
 const hotCache = cacheManager.caching({
   store: "memory",
-  ttl: TTL /*seconds*/,
+  ttl: CACHE_TTL /*seconds*/,
 });
 const coldCache = cacheManager.caching({
   store: "memory",
-  ttl: TTL*10 /*seconds*/,
+  ttl: CACHE_TTL*10 /*seconds*/,
 });
 
 // const redisClient = redis.createClient({
