@@ -8,11 +8,11 @@ const cacheManager = require("cache-manager");
 
 const hotCache = cacheManager.caching({
   store: "memory",
-  ttl: 60 /*seconds*/,
+  ttl: 6000 /*seconds*/,
 });
 const coldCache = cacheManager.caching({
   store: "memory",
-  ttl: 600 /*seconds*/,
+  ttl: 600000 /*seconds*/,
 });
 
 // const redisClient = redis.createClient({
